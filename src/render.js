@@ -42,7 +42,9 @@ export default class Render {
       0.1,
       1000,
     );
+    camera.position.y = -5;
     camera.position.z = 5;
+		camera.lookAt(0, 0, 0);
 
     this.scene = scene;
     this.camera = camera;
@@ -63,6 +65,7 @@ export default class Render {
     this._equilizer();
 
 		this.playspace.run();
+		this.playspace.camera_controller.set_camera(this.camera);
 
 		this.active = true;
 		logger.log("Render ran.");
@@ -83,6 +86,7 @@ export default class Render {
 	stop() {
 		this.active = false;
 		this.playspace?.stop();
+		this.renderer?.domElement?.parentElement?.removeChild(this.renderer.domElement);
 		this.renderer?.dispose();
 		this.renderer = null;
 	}

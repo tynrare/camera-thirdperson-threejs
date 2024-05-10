@@ -1,5 +1,6 @@
 import Render from "./render.js";
 import logger from "./logger.js";
+import { InputAction } from "./inputs.js";
 
 class App {
   constructor() {
@@ -10,10 +11,10 @@ class App {
   }
 
   init() {
-		logger.log("App initializing..");
+    logger.log("App initializing..");
     this.render = new Render().init();
 
-		logger.log("App initialized.");
+    logger.log("App initialized.");
     return this;
   }
 
@@ -24,7 +25,7 @@ class App {
     this.render.run();
     this.loop();
 
-		logger.log("App ran.");
+    logger.log("App ran.");
 
     return this;
   }
@@ -47,6 +48,18 @@ class App {
     this.render.step(dt);
   }
 
+  /**
+   * @param {InputAction} action .
+   * @param {boolean} start .
+   */
+  input(action, start) {
+		if (!this.active) {
+			return;
+		}
+
+		this.render.playspace.input(action, start);
+	}
+
   stop() {
     this.active = false;
     this.timestamp = -1;
@@ -62,7 +75,45 @@ class App {
 
 function main() {
   const app = new App().init().run();
-  window['app'] = app;
+
+  document.body.addEventListener("keydown", keydown);
+  document.body.addEventListener("keyup", keyup);
+
+  /**
+   * @param {KeyboardEvent} ev
+   */
+  function keydown(ev) {
+    if (ev.repeat) return;
+
+		keycode(ev.code, true);
+  }
+  /**
+   * @param {KeyboardEvent} ev
+   */
+  function keyup(ev) {
+    if (ev.repeat) return;
+
+		keycode(ev.code, false);
+  }
+
+	const key_to_action = {
+		ArrowLeft: InputAction.left,
+		KeyA: InputAction.left,
+		ArrowRight: InputAction.right,
+		KeyD: InputAction.right,
+		ArrowUp: InputAction.up,
+		KeyW: InputAction.up,
+		ArrowDown: InputAction.down,
+		KeyS: InputAction.down,
+	}
+	function keycode(key, start) {
+		const action = key_to_action[key] ?? null;
+		if (action !== null) {
+			app.input(action, start);
+		}
+	}
+
+  window["app"] = app;
 }
 
 main();
