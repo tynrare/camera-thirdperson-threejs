@@ -48,13 +48,12 @@ function run_inputs(app) {
 		requestAnimationFrame(loop);
 
 		if(!pointer_down) {
-			app.input_analog(0, 0);
 			return;
 		}
 
 		const w = joystick_el.clientWidth;
 		const h = joystick_el.clientHeight;
-		app.input_analog(dx / w, dy / h);
+		app.input_analog(dx / w * 2, dy / h * 2);
 	}
 	loop();
 
@@ -91,6 +90,7 @@ function run_inputs(app) {
     pointer_down = false;
 		joystick_el.classList.remove("visible");
 		joystick_pimp_el.classList.remove("visible");
+		app.input_analog(0, 0);
   }
 
   /**
