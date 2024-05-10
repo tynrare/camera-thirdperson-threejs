@@ -81,6 +81,11 @@ export default class PawnThirdPerson {
     }
   }
 
+	input_analog(x, y) {
+		this.direction.x = x;
+		this.direction.y = y;
+	}
+
   /**
    * @param {THREE.Camera} camera .
    */

@@ -70,6 +70,14 @@ export default class App {
     this.playspace.input(action, start);
   }
 
+	input_analog(x, y) {
+    if (!this.active) {
+      return;
+    }
+
+    this.playspace.input_analog(x, y);
+	}
+
   stop() {
     this.active = false;
     this.timestamp = -1;

@@ -55,19 +55,20 @@ export default class CameraThirdPerson {
     if (this.direction.y < 0) {
       //..
     } else if (this.direction.y > 0) {
-			//rot_speed = Math.pow(rot_speed, 1e-2);
       target_angle = this._target.rotation.z;
+      // uncommend to speedup rotation durning moving forward
+      //rot_speed = Math.pow(rot_speed, 1e-2);
     } else if (this.direction.x != 0) {
+      // ...
+      // suppose to rotate camera durning steer movements but this one donno work
       //target_angle += this.direction.x * 0.01 * dt;
     } else {
       target_angle = this._target.rotation.z;
     }
 
     const angle_d = angle_sub(this._target_lrot, target_angle);
-    this._target_lrot +=
-      angle_d *
-      Math.pow(1 - Math.abs(angle_d / Math.PI), 1) *
-      this.config.rotation_speed;
+    const dist_angle_factor = Math.pow(1 - Math.abs(angle_d / Math.PI), 2);
+    this._target_lrot += angle_d * dist_angle_factor * rot_speed;
 
     pos.applyAxisAngle(Vec3Up, this._target_lrot);
 

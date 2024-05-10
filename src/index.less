@@ -1,0 +1,40 @@
+
+body html {
+	margin: 0;
+}
+
+#screen_joytick {
+	position: absolute;
+	width: 30vw;
+	height: 30vw;
+	opacity: 0;
+	border: 4px solid white;
+	border-radius: 100%;
+	transform: translate(-50%, -50%);
+	transition-duration: 500ms;
+	transition-property: opacity;
+	user-select: none;
+	pointer-events: none;
+
+	&.visible {
+		opacity: 1;
+	}
+}
+
+#screen_joytick_pimp {
+	background-color: white;
+	border-radius: 100%;
+	position: absolute;
+	width: 5vw;
+	height: 5vw;
+	transform: translate(-50%, -50%);
+	transition-duration: 200ms;
+	transition-property: opacity;
+	user-select: none;
+	pointer-events: none;
+	opacity: 0;
+
+	&.visible {
+		opacity: 1;
+	}
+}

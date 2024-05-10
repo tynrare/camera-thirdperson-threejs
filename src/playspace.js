@@ -2,6 +2,7 @@ import * as THREE from "three";
 import Loader from "./loader.js";
 import CameraThirdPerson from "./camera_third_person.js";
 import PawnThirdPerson from "./pawn_third_person.js";
+import { clamp } from "./math.js";
 
 import { InputAction } from "./inputs.js";
 
@@ -79,6 +80,12 @@ export default class Playspace {
    */
   input(action, start) {
 		this.pawn_controller.input(action, start);
+		const d = this.pawn_controller.direction;
+		this.camera_controller.direction.set(d.x, d.y);
+	}
+
+	input_analog(x, y) {
+		this.pawn_controller.input_analog(clamp(-1, 1, x), clamp(-1, 1, y));
 		const d = this.pawn_controller.direction;
 		this.camera_controller.direction.set(d.x, d.y);
 	}
