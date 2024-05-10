@@ -29,8 +29,11 @@ export default class Playspace {
 
   run() {
     {
-      const geometry = new THREE.PlaneGeometry(10, 10);
+      const geometry = new THREE.PlaneGeometry(32, 32);
       const texture = Loader.instance.get_texture("tex0.png");
+			texture.wrapS = THREE.RepeatWrapping;
+			texture.wrapT = THREE.RepeatWrapping;
+			texture.repeat.set( 4, 4 );
       const material = new THREE.MeshBasicMaterial({
         map: texture,
       });

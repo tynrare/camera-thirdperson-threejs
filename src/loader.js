@@ -25,9 +25,14 @@ export default class Loader {
 		return Loader._instance;
 	}
 
-	get_texture(url, flip = false) {
+	/**
+	 * @param {string} url .
+	 * @returns {THREE.Texture} .
+	 */
+	get_texture(url) {
 		if (this.cache.textures[url]) {
 			logger.log(`Loader::get_texture texture ${url} fetched from cache..`)
+			// should be cloned probably
 			return this.cache.textures[url];
 		}
 
@@ -36,7 +41,6 @@ export default class Loader {
 			logger.log(`Loader::get_texture texture ${url} loaded.`)
 		});
 		texture.colorSpace = THREE.SRGBColorSpace;
-		texture.flipY = flip;
 		this.cache.textures[url] = texture;
 
 		return texture;
