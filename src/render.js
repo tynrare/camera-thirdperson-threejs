@@ -1,7 +1,6 @@
 import * as THREE from "three";
 import logger from "./logger.js";
 import { Vector2 } from "three";
-import Playspace from "./playspace.js";
 
 export class RenderConfig {
   constructor() {
@@ -23,9 +22,6 @@ export default class Render {
     this.camera = null;
     /** @type {THREE.WebGLRenderer} */
     this.renderer = null;
-
-    /** @type {Playspace} */
-		this.playspace = null;
 
     this.cache = new RenderCache();
     this.config = new RenderConfig();
@@ -49,8 +45,6 @@ export default class Render {
     this.scene = scene;
     this.camera = camera;
 
-		this.playspace = new Playspace().init(this.scene);
-
 		logger.log("Render initialized.");
 
     return this;
@@ -64,9 +58,6 @@ export default class Render {
     this.renderer = renderer;
     this._equilizer();
 
-		this.playspace.run();
-		this.playspace.camera_controller.set_camera(this.camera);
-
 		this.active = true;
 		logger.log("Render ran.");
   }
@@ -78,14 +69,11 @@ export default class Render {
 
     this._equilizer();
 
-		this.playspace.step(dt);
-
     this.renderer.render(this.scene, this.camera);
   }
 
 	stop() {
 		this.active = false;
-		this.playspace?.stop();
 		this.renderer?.domElement?.parentElement?.removeChild(this.renderer.domElement);
 		this.renderer?.dispose();
 		this.renderer = null;
@@ -97,8 +85,6 @@ export default class Render {
 		this.scene = null;
 		this.camera?.clear();
 		this.camera = null;
-		this.playspace?.dispose();
-		this.playspace = null;
 	}
 
   // ---

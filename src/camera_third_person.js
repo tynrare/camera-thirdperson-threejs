@@ -1,12 +1,6 @@
 import * as THREE from "three";
-import { Matrix4, Vector3 } from "three";
-
-const Vec3Up = new Vector3(0, 0, 1);
-
-function angle_sub(angle1, angle2) {
-  const diff = ((angle2 - angle1 + Math.PI) % (Math.PI * 2)) - Math.PI;
-  return diff < -Math.PI ? diff + Math.PI * 2 : diff;
-}
+import { Vector2, Vector3 } from "three";
+import { Vec3Up, angle_sub } from "./math.js";
 
 export default class CameraThirdPerson {
   constructor() {
@@ -19,6 +13,9 @@ export default class CameraThirdPerson {
     this._target_lrot = 0;
     this._camera_lpos = new Vector3();
 
+		// input pawn direction update required to correct target angles
+		this.direction = new Vector2();
+
     this.cache = {
       v3: new Vector3(),
     };
@@ -27,13 +24,15 @@ export default class CameraThirdPerson {
       // x distance to target
       distance: 10,
       // z height
-      height: 7,
+      height: 3,
       // first target following factor. 0-1
       follow_speed: 0.1,
       // second target following factor. 0-1
-      rotation_speed: 0.5,
+      rotation_speed: 0.1,
       // final factor
       camera_speed: 0.1,
+			// scales rotation_speed depends on camera-target angle diff
+			stick_factor: 0.1
     };
   }
 
@@ -42,17 +41,38 @@ export default class CameraThirdPerson {
       return;
     }
 
+		// ---
     // construct local position vector
     const pos = this.cache.v3.set(0, -1, 0);
     pos.normalize().multiplyScalar(this.config.distance);
     pos.z += this.config.height;
 
-    // rotate around axis
-    const rot_lerp =
-      angle_sub(this._target_lrot, this._target.rotation.z) *
-      this.config.rotation_speed;
-    this._target_lrot += rot_lerp;
+		// -- angle
+		// modify target rotation based on imput 
+		// while input camera does not follow target
+		let target_angle = this._camera.rotation.z;
+		if (this.direction.y < 0) {
+			//.. 
+		} else if (this.direction.x != 0) {
+			target_angle += this.direction.x * 0.02 * dt;
+		} else {
+			target_angle = this._target.rotation.z
+		}
+
+		const angle_diff = 
+      angle_sub(this._camera.rotation.z, target_angle);
+    let rot =
+      angle_sub(this._target_lrot, target_angle);
+		let rot_factor = this.config.rotation_speed;
+
+		//const angle_limit = Math.pow(1 - angle_diff / Math.PI, 8);
+		//rot_factor *= angle_limit;
+
+    this._target_lrot += rot * rot_factor;
+
     pos.applyAxisAngle(Vec3Up, this._target_lrot);
+
+		// ---
 
     // apply target position
     this._target_lpos.lerp(this._target.position, this.config.follow_speed);
@@ -66,7 +86,7 @@ export default class CameraThirdPerson {
 
     this._camera.lookAt(this._target_lpos);
 
-    // optianal: look straight to target
+    // optional: look straight to target
     //this._camera.lookAt(this._target.position);
   }
 

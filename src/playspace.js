@@ -1,6 +1,8 @@
 import * as THREE from "three";
 import Loader from "./loader.js";
 import CameraThirdPerson from "./camera_third_person.js";
+import PawnThirdPerson from "./pawn_third_person.js";
+
 import { InputAction } from "./inputs.js";
 
 export default class Playspace {
@@ -13,8 +15,8 @@ export default class Playspace {
     this.plane = null;
     /** @type {CameraThirdPerson} */
     this.camera_controller = null;
-
-    this.movement = new THREE.Vector2();
+    /** @type {PawnThirdPerson} */
+    this.pawn_controller = null;
   }
 
   /**
@@ -23,6 +25,7 @@ export default class Playspace {
   init(scene) {
     this._scene = scene;
     this.camera_controller = new CameraThirdPerson();
+    this.pawn_controller = new PawnThirdPerson();
 
     return this;
   }
@@ -60,18 +63,14 @@ export default class Playspace {
 		}
 
     this.camera_controller.set_target(this.cube);
+    this.pawn_controller.set_target(this.cube);
 
     return this;
   }
 
   step(dt) {
     this.camera_controller.step(dt);
-
-    this.cube.rotateZ(this.movement.x * 0.002 * dt);
-    this.cube.position.x -=
-      Math.sin(this.cube.rotation.z) * this.movement.y * 0.003 * dt;
-    this.cube.position.y +=
-      Math.cos(this.cube.rotation.z) * this.movement.y * 0.003 * dt;
+    this.pawn_controller.step(dt);
   }
 
   /**
@@ -79,32 +78,10 @@ export default class Playspace {
    * @param {boolean} start .
    */
   input(action, start) {
-    let direction = null;
-    let factor = null;
+		this.pawn_controller.input(action, start);
+		this.camera_controller.direction = this.pawn_controller.direction;
+	}
 
-    switch (action) {
-      case InputAction.left:
-        direction = "x";
-        factor = start ? 1 : 0;
-        break;
-      case InputAction.right:
-        direction = "x";
-        factor = start ? -1 : 0;
-        break;
-      case InputAction.up:
-        direction = "y";
-        factor = start ? 1 : 0;
-        break;
-      case InputAction.down:
-        direction = "y";
-        factor = start ? -1 : 0;
-        break;
-    }
-
-    if (factor !== null && direction !== null) {
-      this.movement[direction] = factor;
-    }
-  }
 
   stop() {
     this.cube?.removeFromParent();
@@ -118,5 +95,7 @@ export default class Playspace {
     this._scene = null;
     this.camera_controller?.cleanup();
     this.camera_controller = null;
+    this.pawn_controller?.cleanup();
+    this.pawn_controller = null;
   }
 }
