@@ -1,6 +1,6 @@
-# camera-thridperson-threejs
+# camera-thirdperson-threejs
 
 d240510
 
-[web demo](https://camera-thridperson-threejs.netlify.app/)
+[web demo](https://camera-thirdperson-threejs.netlify.app/)
 
