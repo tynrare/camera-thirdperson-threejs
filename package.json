@@ -1,0 +1,17 @@
+{
+  "name": "camera-thridperson-threejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+		"start": "vite src"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "three": "^0.164.1"
+  },
+  "devDependencies": {
+    "vite": "^5.2.11"
+  }
+}
