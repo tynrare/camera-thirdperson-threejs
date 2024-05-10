@@ -1,3 +1,5 @@
+import App from "./app.js";
+
 /**
  * @enum {number}
  */
@@ -17,4 +19,46 @@ const InputAction = {
   action_enter: 12,
 };
 
-export { InputAction };
+/**
+* @param {App} app .
+*/
+function run_inputs(app) {
+  document.body.addEventListener("keydown", keydown);
+  document.body.addEventListener("keyup", keyup);
+
+  /**
+   * @param {KeyboardEvent} ev
+   */
+  function keydown(ev) {
+    if (ev.repeat) return;
+
+    keycode(ev.code, true);
+  }
+  /**
+   * @param {KeyboardEvent} ev
+   */
+  function keyup(ev) {
+    if (ev.repeat) return;
+
+    keycode(ev.code, false);
+  }
+
+  const key_to_action = {
+    ArrowLeft: InputAction.left,
+    KeyA: InputAction.left,
+    ArrowRight: InputAction.right,
+    KeyD: InputAction.right,
+    ArrowUp: InputAction.up,
+    KeyW: InputAction.up,
+    ArrowDown: InputAction.down,
+    KeyS: InputAction.down,
+  };
+  function keycode(key, start) {
+    const action = key_to_action[key] ?? null;
+    if (action !== null) {
+      app.input(action, start);
+    }
+  }
+}
+
+export { InputAction, run_inputs };

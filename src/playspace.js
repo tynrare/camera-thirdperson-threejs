@@ -45,7 +45,16 @@ export default class Playspace {
       const cube = new THREE.Mesh(geometry, material);
       this._scene.add(cube);
       this.cube = cube;
+			this.cube.position.z += 1;
     }
+		{
+      const geometry = new THREE.BoxGeometry(0.9, 0.1, 0.1);
+      const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+      const cube = new THREE.Mesh(geometry, material);
+      this.cube.add(cube);
+			cube.position.y += 0.5;
+			cube.position.z += 0.5;
+		}
 
     this.camera_controller.set_target(this.cube);
 
@@ -55,11 +64,11 @@ export default class Playspace {
   step(dt) {
     this.camera_controller.step(dt);
 
-    this.cube.rotateZ(this.movement.x * 0.001 * dt);
+    this.cube.rotateZ(this.movement.x * 0.002 * dt);
     this.cube.position.x -=
-      Math.sin(this.cube.rotation.z) * this.movement.y * 0.001 * dt;
+      Math.sin(this.cube.rotation.z) * this.movement.y * 0.003 * dt;
     this.cube.position.y +=
-      Math.cos(this.cube.rotation.z) * this.movement.y * 0.001 * dt;
+      Math.cos(this.cube.rotation.z) * this.movement.y * 0.003 * dt;
   }
 
   /**
@@ -81,11 +90,11 @@ export default class Playspace {
         break;
       case InputAction.up:
         direction = "y";
-        factor = start ? -1 : 0;
+        factor = start ? 1 : 0;
         break;
       case InputAction.down:
         direction = "y";
-        factor = start ? 1 : 0;
+        factor = start ? -1 : 0;
         break;
     }
 
