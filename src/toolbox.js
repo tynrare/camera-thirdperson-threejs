@@ -17,4 +17,5 @@ export function run_toolbox(app) {
 	fcamera.add(camera_conf, "camera_speed", 1e-4, 1);
 	const fpawn = gui.addFolder("pawn");
 	fpawn.add(pawn_conf, "rotation_speed", 1e-4, 1);
+	fpawn.add(pawn_conf, "movement_speed", 1e-4, 1);
 }

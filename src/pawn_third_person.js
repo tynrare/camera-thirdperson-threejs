@@ -20,7 +20,8 @@ export default class PawnThirdPerson {
     };
 		
 		this.config = {
-			rotation_speed: 0.1
+			rotation_speed: 0.1,
+			movement_speed: 0.5
 		}
   }
 
@@ -35,9 +36,9 @@ export default class PawnThirdPerson {
 		const dv_c = this.cache.v3_0.copy(dv);
 		dv_c.applyAxisAngle(Vec3Up, Math.PI / 2);
 		const px = dv_c.x * this.direction.x + dv_c.y * this.direction.y;
-		const dx =  px * 0.01 * dt;
+		const dx =  px * 0.01 * dt * this.config.movement_speed;
 		const py = dv.y * this.direction.y + dv.x * this.direction.x;
-		const dy =  py * 0.01 * dt;
+		const dy =  py * 0.01 * dt * this.config.movement_speed;
 
 		this._target.position.x += dx;
 		this._target.position.y += dy;
