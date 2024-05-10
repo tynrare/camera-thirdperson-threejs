@@ -116,7 +116,7 @@ export default class Render {
     const h = this.viewport_h;
     if (size.width != w || size.height != h) {
       this.renderer.setSize(w, h);
-      //this.set_camera_aspect(w, h);
+      this.set_camera_aspect(w, h);
     }
   }
 
