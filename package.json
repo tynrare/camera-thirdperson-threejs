@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-		"start": "vite src"
+    "start": "vite src",
+    "build": "vite build src --outDir ../dist --emptyOutDir"
   },
   "author": "",
   "license": "ISC",
