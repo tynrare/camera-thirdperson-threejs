@@ -26,11 +26,11 @@ function run_inputs(app) {
   document.body.addEventListener("keydown", keydown);
   document.body.addEventListener("keyup", keyup);
 
-  document.body.addEventListener("touchstart", pointerdown);
+  document.body.addEventListener("touchstart", pointerdown, { passive: false });
   document.body.addEventListener("mousedown", pointerdown);
-  document.body.addEventListener("touchend", pointerup);
+  document.body.addEventListener("touchend", pointerup, { passive: false });
   document.body.addEventListener("mouseup", pointerup);
-  document.body.addEventListener("touchmove", pointermove);
+  document.body.addEventListener("touchmove", pointermove, { passive: false });
   document.body.addEventListener("mousemove", pointermove);
 
 	/** @type {HTMLElement} */
