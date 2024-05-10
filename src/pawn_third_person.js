@@ -10,12 +10,13 @@ export default class PawnThirdPerson {
     /** @type {THREE.Object3D} */
     this._target = null;
 
-    this.direction = new THREE.Vector2();
+    this.direction = new THREE.Vector3();
 
 		this.view_rot = 0;
 
     this.cache = {
       v3: new Vector3(),
+      v3_0: new Vector3(),
     };
 		
 		this.config = {
@@ -29,19 +30,20 @@ export default class PawnThirdPerson {
     }
 
 		this.view_rot = this._camera.rotation.z;
+		const dv = this.cache.v3.copy(this._target.position).sub(this._camera.position);
+		dv.normalize();
+		const dv_c = this.cache.v3_0.copy(dv);
+		dv_c.applyAxisAngle(Vec3Up, Math.PI / 2);
+		const px = dv_c.x * this.direction.x + dv_c.y * this.direction.y;
+		const dx =  px * 0.01 * dt;
+		const py = dv.y * this.direction.y + dv.x * this.direction.x;
+		const dy =  py * 0.01 * dt;
 
-    const ra = Math.cos(this.view_rot);
-    const rb = Math.sin(this.view_rot);
-    const dirx = this.direction.x * 0.003 * dt;
-    const diry = this.direction.y * 0.003 * dt;
-    const dx = -dirx * ra - diry * rb;
-    const dy = diry * ra - dirx * rb;
-
-    this._target.position.x += dx;
-    this._target.position.y += dy;
+		this._target.position.x += dx;
+		this._target.position.y += dy;
 
 		if (this.direction.x || this.direction.y) {
-			const dir = this.cache.v3.set(dx, dy, 0).normalize();
+			dv.normalize();
 			const angle_d = angle_sub(this._target.rotation.z, Math.atan2(-dx, dy)) * this.config.rotation_speed;
 			this._target.rotation.z += angle_d;
 		}

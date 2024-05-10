@@ -79,7 +79,8 @@ export default class Playspace {
    */
   input(action, start) {
 		this.pawn_controller.input(action, start);
-		this.camera_controller.direction = this.pawn_controller.direction;
+		const d = this.pawn_controller.direction;
+		this.camera_controller.direction.set(d.x, d.y);
 	}
 
 

@@ -26,7 +26,7 @@ export default class CameraThirdPerson {
       // z height
       height: 3,
       // first target following factor. 0-1
-      follow_speed: 0.1,
+      follow_speed: 0.2,
       // second target following factor. 0-1
       rotation_speed: 0.01,
       // final factor
@@ -55,8 +55,8 @@ export default class CameraThirdPerson {
     if (this.direction.y < 0) {
       //..
     } else if (this.direction.y > 0) {
-			rot_speed = Math.pow(rot_speed, 1e-2);
-      //target_angle = this._target.rotation.z;
+			//rot_speed = Math.pow(rot_speed, 1e-2);
+      target_angle = this._target.rotation.z;
     } else if (this.direction.x != 0) {
       //target_angle += this.direction.x * 0.01 * dt;
     } else {
