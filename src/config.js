@@ -76,6 +76,11 @@ class CameraConfig {
      * scales rotation_speed depends on camera-target radial distance 
      */
     this.stick_factor = 2;
+		/**
+		 * Camera always follows pawn.
+		 * Pawn able to look at camera if disabled;
+		 */
+		this.attach_to_pawn = true;
   }
 }
 

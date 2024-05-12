@@ -24,6 +24,7 @@ function run_toolbox(app) {
   fcamera.add(camera_conf, "rotation_active_speed", 1e-4, 1);
   fcamera.add(camera_conf, "camera_speed", 1e-4, 1);
   fcamera.add(camera_conf, "stick_factor", 0.5, 8);
+  fcamera.add(camera_conf, "attach_to_pawn");
   const fpawn = gui.addFolder("pawn");
   fpawn.add(pawn_conf, "rotation_speed", 1e-4, 1);
   fpawn.add(pawn_conf, "movement_speed", 1e-4, 1);

@@ -49,6 +49,11 @@ class CameraThirdPerson {
     // new target angle set to prev angle
     // wich means that rotation stays the same
     let target_angle = this._target_lrot;
+
+		if (this.config.attach_to_pawn) {
+			target_angle = this._target.rotation.z;
+		}
+
     let rot_speed = this.config.rotation_passive_speed;
     if (this.direction.y < 0) {
       // movement backwards - no rotation required
