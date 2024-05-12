@@ -1,6 +1,8 @@
+ /** @namespace Core */
 import App from "./app.js";
 
 /**
+ * @memberof core
  * @enum {number}
  */
 const InputAction = {
@@ -20,18 +22,21 @@ const InputAction = {
 };
 
 /**
+ * creates keyboard and touch inputs
+ *
+ * @memberof core
  * @param {App} app .
  */
-function run_inputs(app) {
+function run_inputs(canvas, app) {
   document.body.addEventListener("keydown", keydown);
   document.body.addEventListener("keyup", keyup);
 
-  document.body.addEventListener("touchstart", pointerdown, { passive: false });
-  document.body.addEventListener("mousedown", pointerdown);
-  document.body.addEventListener("touchend", pointerup, { passive: false });
-  document.body.addEventListener("mouseup", pointerup);
-  document.body.addEventListener("touchmove", pointermove, { passive: false });
-  document.body.addEventListener("mousemove", pointermove);
+  canvas.addEventListener("touchstart", pointerdown, { passive: false });
+  canvas.addEventListener("mousedown", pointerdown);
+  canvas.addEventListener("touchend", pointerup, { passive: false });
+  canvas.addEventListener("mouseup", pointerup);
+  canvas.addEventListener("touchmove", pointermove, { passive: false });
+  canvas.addEventListener("mousemove", pointermove);
 
 	/** @type {HTMLElement} */
 	let joystick_el = document.querySelector("#screen_joytick");

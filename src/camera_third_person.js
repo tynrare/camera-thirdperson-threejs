@@ -1,8 +1,17 @@
+/** @namespace ThirdPersonControllers */
+
 import * as THREE from "three";
 import { Vector2, Vector3 } from "three";
 import { Vec3Up, angle_sub } from "./math.js";
+import { CameraConfig } from "./config.js";
 
-export default class CameraThirdPerson {
+/**
+ * Controls camera.
+ *
+ * @class CameraThirdPerson
+ * @memberof ThirdPersonControllers
+ */
+class CameraThirdPerson {
   constructor() {
     /** @type {THREE.Camera} */
     this._camera = null;
@@ -20,20 +29,7 @@ export default class CameraThirdPerson {
       v3: new Vector3(),
     };
 
-    this.config = {
-      // x distance to target
-      distance: 10,
-      // z height
-      height: 3,
-      // first target following factor. 0-1
-      follow_speed: 0.2,
-      // second target following factor. 0-1
-      rotation_speed: 0.01,
-      // final factor
-      camera_speed: 0.1,
-      // scales rotation_speed depends on camera-target angle diff
-      stick_factor: 0.1,
-    };
+    this.config = new CameraConfig();
   }
 
   step(dt) {
@@ -49,25 +45,30 @@ export default class CameraThirdPerson {
 
     // -- angle
     // modify target rotation based on imput
-    // while input camera does not follow target
+
+    // new target angle set to prev angle
+    // wich means that rotation stays the same
     let target_angle = this._target_lrot;
-    let rot_speed = this.config.rotation_speed;
+    let rot_speed = this.config.rotation_passive_speed;
     if (this.direction.y < 0) {
+      // movement backwards - no rotation required
       //..
     } else if (this.direction.y > 0) {
+      // movement forwards
       target_angle = this._target.rotation.z;
-      // uncommend to speedup rotation durning moving forward
-      //rot_speed = Math.pow(rot_speed, 1e-2);
+      rot_speed = this.config.rotation_active_speed;
     } else if (this.direction.x != 0) {
-      // ...
-      // suppose to rotate camera durning steer movements but this one donno work
-      //target_angle += this.direction.x * 0.01 * dt;
+      // almost impossible with analog input
     } else {
+      // no inputs provided - move behind target
       target_angle = this._target.rotation.z;
     }
 
     const angle_d = angle_sub(this._target_lrot, target_angle);
-    const dist_angle_factor = Math.pow(1 - Math.abs(angle_d / Math.PI), 2);
+    const dist_angle_factor = Math.pow(
+      1 - Math.abs(angle_d / Math.PI),
+      this.config.stick_factor,
+    );
     this._target_lrot += angle_d * dist_angle_factor * rot_speed;
 
     pos.applyAxisAngle(Vec3Up, this._target_lrot);
@@ -111,3 +112,5 @@ export default class CameraThirdPerson {
     this._target_lrot = this._target.rotation.z;
   }
 }
+
+export default CameraThirdPerson;

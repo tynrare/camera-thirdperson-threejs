@@ -1,9 +1,17 @@
+ /** @namespace Core */
+
 import Render from "./render.js";
 import logger from "./logger.js";
 import { InputAction } from "./inputs.js";
 import Playspace from "./playspace.js";
 
-export default class App {
+/**
+ * Core class
+ * @example new App().init().run()
+ * @class App
+ * @memberof Core
+ */
+class App {
   constructor() {
     this.active = false;
     this.timestamp = -1;
@@ -93,3 +101,5 @@ export default class App {
 		this.playspace = null;
   }
 }
+
+export default App;

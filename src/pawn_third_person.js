@@ -1,9 +1,18 @@
+ /** @namespace ThirdPersonControllers */
+
 import * as THREE from "three";
 import { Vector3 } from "three";
 import { InputAction } from "./inputs.js";
 import { Vec3Up, angle_sub } from "./math.js";
+import { PawnConfig } from "./config.js";
 
-export default class PawnThirdPerson {
+/**
+ * Controls pawn.
+ *
+ * @class PawnThirdPerson
+ * @memberof ThirdPersonControllers 
+ */
+class PawnThirdPerson {
   constructor() {
     /** @type {THREE.Camera} */
     this._camera = null;
@@ -19,10 +28,7 @@ export default class PawnThirdPerson {
       v3_0: new Vector3(),
     };
 		
-		this.config = {
-			rotation_speed: 0.1,
-			movement_speed: 0.5
-		}
+		this.config = new PawnConfig();
   }
 
   step(dt) {
@@ -55,35 +61,39 @@ export default class PawnThirdPerson {
    * @param {boolean} start .
    */
   input(action, start) {
-    let direction = null;
+    let axis = null;
     let factor = null;
 
     switch (action) {
       case InputAction.left:
-        direction = "x";
+        axis = "x";
         factor = start ? 1 : 0;
         break;
       case InputAction.right:
-        direction = "x";
+        axis = "x";
         factor = start ? -1 : 0;
         break;
       case InputAction.up:
-        direction = "y";
+        axis = "y";
         factor = start ? 1 : 0;
         break;
       case InputAction.down:
-        direction = "y";
+        axis = "y";
         factor = start ? -1 : 0;
         break;
     }
 
-    if (factor !== null && direction !== null) {
-      this.direction[direction] = factor;
+    if (factor !== null && axis !== null) {
+			const direction = {x: 0, y:0};
+      direction[axis] = factor;
+			this.input_analog(direction);
     }
   }
 
 	input_analog(x, y) {
-		this.direction.x = x;
+		const fx = Math.abs(y * this.config.steer_threshold);
+		const nx = Math.max(0, Math.abs(x) - fx) * Math.sin(x);
+		this.direction.x = nx;
 		this.direction.y = y;
 	}
 
@@ -107,3 +117,5 @@ export default class PawnThirdPerson {
     this._target = null;
   }
 }
+
+export default PawnThirdPerson;

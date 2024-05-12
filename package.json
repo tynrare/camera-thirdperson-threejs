@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "vite",
-    "build": "vite build"
+    "build": "vite build",
+		"doc": "jsdoc src -d dist/docs -R README.md"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +15,7 @@
     "three": "^0.164.1"
   },
   "devDependencies": {
+    "jsdoc": "^4.0.3",
     "less": "^4.2.0",
     "vite": "^5.2.11"
   }

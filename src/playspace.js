@@ -1,3 +1,5 @@
+ /** @namespace Render */
+
 import * as THREE from "three";
 import Loader from "./loader.js";
 import CameraThirdPerson from "./camera_third_person.js";
@@ -6,7 +8,13 @@ import { clamp } from "./math.js";
 
 import { InputAction } from "./inputs.js";
 
-export default class Playspace {
+/**
+ * basic threejs stage
+ *
+ * @class Playspace
+ * @memberof Render 
+ */
+class Playspace {
   constructor() {
     /** @type {THREE.Scene} */
     this._scene = null;
@@ -107,3 +115,5 @@ export default class Playspace {
     this.pawn_controller = null;
   }
 }
+
+export default Playspace;

@@ -1,3 +1,5 @@
+ /** @namespace Core */
+
 import { Vector3 } from "three";
 
 export const Vec3Up = new Vector3(0, 0, 1);

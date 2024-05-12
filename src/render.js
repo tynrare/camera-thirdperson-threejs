@@ -1,12 +1,9 @@
+/** @namespace Render */
+
 import * as THREE from "three";
 import logger from "./logger.js";
 import { Vector2 } from "three";
-
-export class RenderConfig {
-  constructor() {
-    this.camera_fov = 75;
-  }
-}
+import { RenderConfig } from "./config.js";
 
 export class RenderCache {
   constructor() {
@@ -14,7 +11,13 @@ export class RenderCache {
   }
 }
 
-export default class Render {
+/**
+ * base threejs management class
+ *
+ * @class Render
+ * @memberof Render
+ */
+class Render {
   constructor() {
     /** @type {THREE.Scene} */
     this.scene = null;
@@ -26,11 +29,11 @@ export default class Render {
     this.cache = new RenderCache();
     this.config = new RenderConfig();
 
-		this.active = false;
+    this.active = false;
   }
 
   init() {
-		logger.log("Render initializing..");
+    logger.log("Render initializing..");
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       75,
@@ -40,52 +43,54 @@ export default class Render {
     );
     camera.position.y = -5;
     camera.position.z = 5;
-		camera.lookAt(0, 0, 0);
+    camera.lookAt(0, 0, 0);
 
     this.scene = scene;
     this.camera = camera;
 
-		logger.log("Render initialized.");
+    logger.log("Render initialized.");
 
     return this;
   }
 
   run() {
     const renderer = new THREE.WebGLRenderer();
-		renderer.setSize(this.viewport_w, this.viewport_h);
+    renderer.setSize(this.viewport_w, this.viewport_h);
     document.body.appendChild(renderer.domElement);
 
     this.renderer = renderer;
     this._equilizer();
 
-		this.active = true;
-		logger.log("Render ran.");
+    this.active = true;
+    logger.log("Render ran.");
   }
 
   step(dt) {
-		if (!this.active) {
-			return;
-		}
+    if (!this.active) {
+      return;
+    }
 
     this._equilizer();
 
     this.renderer.render(this.scene, this.camera);
   }
 
-	stop() {
-		this.active = false;
-		this.renderer?.domElement?.parentElement?.removeChild(this.renderer.domElement);
-		this.renderer?.dispose();
-		this.renderer = null;
-	}
+  stop() {
+    this.active = false;
+    this.renderer?.domElement?.parentElement?.removeChild(
+      this.renderer.domElement,
+    );
+    this.renderer?.dispose();
+    this.renderer = null;
+  }
 
-	dispose() {
-		this.stop();
-		this.scene?.clear();
-		this.scene = null;
-		this.camera?.clear();
-		this.camera = null;
-	}
+  dispose() {
+    this.stop();
+    this.scene?.clear();
+    this.scene = null;
+    this.camera?.clear();
+    this.camera = null;
+  }
 
   // ---
 
@@ -116,3 +121,5 @@ export default class Render {
     this.camera.updateProjectionMatrix();
   }
 }
+
+export default Render;

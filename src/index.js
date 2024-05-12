@@ -4,7 +4,8 @@ import { run_toolbox } from "./toolbox.js";
 
 function main() {
   const app = new App().init().run();
-	run_inputs(app);
+	const canvas = app.render.renderer.domElement;
+	run_inputs(canvas, app);
 	run_toolbox(app);
   window["app"] = app;
 }
