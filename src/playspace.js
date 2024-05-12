@@ -94,7 +94,7 @@ class Playspace {
     }
 		// character "eyes"
 		{
-      const geometry = new THREE.BoxGeometry(0., 0.1, 0.1);
+      const geometry = new THREE.BoxGeometry(0.6, 0.1, 0.1);
       const material = new THREE.MeshToonMaterial({ color: 0x777777 });
       const cube = new THREE.Mesh(geometry, material);
       this.cube.add(cube);
