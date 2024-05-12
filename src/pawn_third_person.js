@@ -86,7 +86,7 @@ class PawnThirdPerson {
     if (factor !== null && axis !== null) {
 			const direction = {x: 0, y:0};
       direction[axis] = factor;
-			this.input_analog(direction);
+			this.input_analog(direction.x, direction.y);
     }
   }
 

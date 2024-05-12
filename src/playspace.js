@@ -40,12 +40,14 @@ class Playspace {
   }
 
   run() {
+
+		// floot
     {
-      const geometry = new THREE.PlaneGeometry(32, 32);
+      const geometry = new THREE.PlaneGeometry(64, 64);
       const texture = Loader.instance.get_texture("tex0.png");
 			texture.wrapS = THREE.RepeatWrapping;
 			texture.wrapT = THREE.RepeatWrapping;
-			texture.repeat.set( 4, 4 );
+			texture.repeat.set( 8, 8 );
       const material = new THREE.MeshBasicMaterial({
         map: texture,
       });
@@ -54,6 +56,7 @@ class Playspace {
       this.plane = plane;
     }
 
+		// character
     {
       const geometry = new THREE.BoxGeometry(1, 1, 2);
       const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
@@ -69,6 +72,43 @@ class Playspace {
       this.cube.add(cube);
 			cube.position.y += 0.5;
 			cube.position.z += 0.5;
+		}
+
+		// props on scene
+		{
+			const geometry = new THREE.SphereGeometry(2, 4, 2);
+			const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+			const prop = new THREE.Mesh(geometry, material);
+			prop.position.set(16, 16, 3);
+			this._scene.add(prop);
+		}
+		{
+			const geometry = new THREE.BoxGeometry(2, 2, 2);
+			const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+			const prop = new THREE.Mesh(geometry, material);
+			prop.position.set(-16, 16, 3);
+			this._scene.add(prop);
+		}
+		{
+			const geometry = new THREE.SphereGeometry(2, 32, 32);
+			const material = new THREE.MeshBasicMaterial({ color: 0xff00ff });
+			const prop = new THREE.Mesh(geometry, material);
+			prop.position.set(16, -16, 3);
+			this._scene.add(prop);
+		}
+		{
+			const geometry = new THREE.SphereGeometry(2, 32, 32);
+			const material = new THREE.MeshBasicMaterial({ color: 0xff00ff });
+			const prop = new THREE.Mesh(geometry, material);
+			prop.position.set(16, -16, 3);
+			this._scene.add(prop);
+		}
+		{
+			const geometry = new THREE.SphereGeometry(2, 4, 2);
+			const material = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+			const prop = new THREE.Mesh(geometry, material);
+			prop.position.set(-16, -16, 3);
+			this._scene.add(prop);
 		}
 
     this.camera_controller.set_target(this.cube);

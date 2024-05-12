@@ -67,7 +67,7 @@ class CameraConfig {
     /**
      * how fast camera rotates durning input
      */
-    this.rotation_active_speed = 0.03;
+    this.rotation_active_speed = 0.06;
     /**
      * actial camera movement speed
      */
