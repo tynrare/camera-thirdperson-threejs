@@ -30,7 +30,7 @@ class PawnConfig {
     /**
      * @type {number}
      */
-    this.movement_speed = 0.7;
+    this.movement_speed = 1;
     /**
      * decreases X movement factor
      * depending on Y
@@ -51,11 +51,11 @@ class CameraConfig {
     /**
      * x distance to target
      */
-    this.distance = 10;
+    this.distance = 7;
     /**
      * z height
      */
-    this.height = 3;
+    this.height = 1;
     /**
      * how fast camera follows target
      */
@@ -74,8 +74,15 @@ class CameraConfig {
     this.camera_speed = 0.07;
     /**
      * scales rotation_speed depends on camera-target radial distance durning idle
+		 *
+		 * After input end, if pawn looks directly at camenra:
+		 * - Value 0.5 - camera quickly turns behind pawn
+		 * - Value 1 - camera looks at pawn for few secs
+		 * - Value 2 - camera looks at pawnwithout turning
+		 * - Value above 2 - camera turns behind pawn really slow
+		 *
      */
-    this.stick_passive_factor = 1;
+    this.stick_passive_factor = 0.7;
     /**
      * scales rotation_speed depends on camera-target radial distance durning input. 
 		 * Not active while attach_to_pawn==true

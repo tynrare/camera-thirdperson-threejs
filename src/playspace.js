@@ -26,6 +26,8 @@ class Playspace {
     this.camera_controller = null;
     /** @type {PawnThirdPerson} */
     this.pawn_controller = null;
+
+		this.lights = {};
   }
 
   /**
@@ -40,18 +42,41 @@ class Playspace {
   }
 
   run() {
+		// fog
+		this._scene.fog = new THREE.Fog( 0x66c4c4, 10, 150 );
+		this._scene.background = new THREE.Color(0x66c0dc);
+		// lights
+		{
+			const ambient = new THREE.AmbientLight( 0x404040 ); 
+			this._scene.add( ambient );
+			const directional= new THREE.DirectionalLight( 0xffffff, 2 );
+			directional.position.set(100, 100, 100);
+			this._scene.add( directional );
+			const hemisphere = new THREE.HemisphereLight( 0xffffbb, 0xffffbb, 2 );
+			this._scene.add( hemisphere );
 
-		// floot
+			directional.castShadow = true;
+			directional.shadow.mapSize.width = 4096;
+			directional.shadow.mapSize.height = 4096;
+			directional.shadow.camera.left = -64;
+			directional.shadow.camera.bottom = -64;
+			directional.shadow.camera.right = 64;
+			directional.shadow.camera.top = 64;
+		}
+
+		// floor
     {
-      const geometry = new THREE.PlaneGeometry(64, 64);
+			const repeats = 64;
+      const geometry = new THREE.PlaneGeometry(repeats*8, repeats*8);
       const texture = Loader.instance.get_texture("tex0.png");
 			texture.wrapS = THREE.RepeatWrapping;
 			texture.wrapT = THREE.RepeatWrapping;
-			texture.repeat.set( 8, 8 );
-      const material = new THREE.MeshBasicMaterial({
+			texture.repeat.set( repeats, repeats );
+      const material = new THREE.MeshToonMaterial({
         map: texture,
       });
       const plane = new THREE.Mesh(geometry, material);
+			plane.receiveShadow = true;
       this._scene.add(plane);
       this.plane = plane;
     }
@@ -59,15 +84,18 @@ class Playspace {
 		// character
     {
       const geometry = new THREE.BoxGeometry(1, 1, 2);
-      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+      const material = new THREE.MeshToonMaterial({ color: 0xFFFFFF });
       const cube = new THREE.Mesh(geometry, material);
       this._scene.add(cube);
       this.cube = cube;
 			this.cube.position.z += 1;
+			cube.castShadow = true;
+			cube.receiveShadow = true;
     }
+		// character "eyes"
 		{
-      const geometry = new THREE.BoxGeometry(0.9, 0.1, 0.1);
-      const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+      const geometry = new THREE.BoxGeometry(0., 0.1, 0.1);
+      const material = new THREE.MeshToonMaterial({ color: 0x777777 });
       const cube = new THREE.Mesh(geometry, material);
       this.cube.add(cube);
 			cube.position.y += 0.5;
@@ -77,38 +105,42 @@ class Playspace {
 		// props on scene
 		{
 			const geometry = new THREE.SphereGeometry(2, 4, 2);
-			const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+			const material = new THREE.MeshToonMaterial({ color: 0xffff00 });
 			const prop = new THREE.Mesh(geometry, material);
 			prop.position.set(16, 16, 3);
 			this._scene.add(prop);
+			prop.castShadow = true;
 		}
 		{
 			const geometry = new THREE.BoxGeometry(2, 2, 2);
-			const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+			const material = new THREE.MeshToonMaterial({ color: 0xff0000 });
 			const prop = new THREE.Mesh(geometry, material);
 			prop.position.set(-16, 16, 3);
 			this._scene.add(prop);
+			prop.castShadow = true;
 		}
 		{
 			const geometry = new THREE.SphereGeometry(2, 32, 32);
-			const material = new THREE.MeshBasicMaterial({ color: 0xff00ff });
+			const material = new THREE.MeshToonMaterial({ color: 0xff00ff });
 			const prop = new THREE.Mesh(geometry, material);
 			prop.position.set(16, -16, 3);
 			this._scene.add(prop);
+			prop.castShadow = true;
 		}
 		{
 			const geometry = new THREE.SphereGeometry(2, 32, 32);
-			const material = new THREE.MeshBasicMaterial({ color: 0xff00ff });
+			const material = new THREE.MeshToonMaterial({ color: 0xff00ff });
 			const prop = new THREE.Mesh(geometry, material);
 			prop.position.set(16, -16, 3);
 			this._scene.add(prop);
 		}
 		{
 			const geometry = new THREE.SphereGeometry(2, 4, 2);
-			const material = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+			const material = new THREE.MeshToonMaterial({ color: 0x0000ff });
 			const prop = new THREE.Mesh(geometry, material);
 			prop.position.set(-16, -16, 3);
 			this._scene.add(prop);
+			prop.castShadow = true;
 		}
 
     this.camera_controller.set_target(this.cube);
@@ -144,6 +176,8 @@ class Playspace {
     this.cube = null;
     this.plane?.removeFromParent();
     this.plane = null;
+		this._scene.fog = null;
+		this._scene.background = null;
   }
 
   dispose() {
