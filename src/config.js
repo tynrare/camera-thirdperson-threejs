@@ -30,7 +30,7 @@ class PawnConfig {
     /**
      * @type {number}
      */
-    this.movement_speed = 0.5;
+    this.movement_speed = 0.7;
     /**
      * decreases X movement factor
      * depending on Y
@@ -73,9 +73,14 @@ class CameraConfig {
      */
     this.camera_speed = 0.07;
     /**
-     * scales rotation_speed depends on camera-target radial distance 
+     * scales rotation_speed depends on camera-target radial distance durning idle
      */
-    this.stick_factor = 2;
+    this.stick_passive_factor = 1;
+    /**
+     * scales rotation_speed depends on camera-target radial distance durning input. 
+		 * Not active while attach_to_pawn==true
+     */
+    this.stick_active_factor = 2;
 		/**
 		 * Camera always follows pawn.
 		 * Pawn able to look at camera if disabled;

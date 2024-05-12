@@ -50,29 +50,36 @@ class CameraThirdPerson {
     // wich means that rotation stays the same
     let target_angle = this._target_lrot;
 
-		if (this.config.attach_to_pawn) {
-			target_angle = this._target.rotation.z;
-		}
 
     let rot_speed = this.config.rotation_passive_speed;
-    if (this.direction.y < 0) {
-      // movement backwards - no rotation required
-      //..
-    } else if (this.direction.y > 0) {
-      // movement forwards
-      target_angle = this._target.rotation.z;
-      rot_speed = this.config.rotation_active_speed;
-    } else if (this.direction.x != 0) {
-      // almost impossible with analog input
-    } else {
-      // no inputs provided - move behind target
-      target_angle = this._target.rotation.z;
-    }
+		let stick_factor = this.config.stick_passive_factor;
+		if (this.config.attach_to_pawn) {
+			target_angle = this._target.rotation.z;
+			if (this.direction.x || this.direction.y) {
+				rot_speed = this.config.rotation_active_speed;
+				stick_factor = this.config.stick_active_factor;
+			}
+		} else {
+			if (this.direction.y < 0) {
+				// movement backwards - no rotation required
+				//..
+			} else if (this.direction.y > 0) {
+				// movement forwards
+				target_angle = this._target.rotation.z;
+				rot_speed = this.config.rotation_active_speed;
+			} else if (this.direction.x != 0) {
+				// almost impossible with analog input
+			} else {
+				// no inputs provided - move behind target
+				target_angle = this._target.rotation.z;
+			}
+		}
+
 
     const angle_d = angle_sub(this._target_lrot, target_angle);
     const dist_angle_factor = Math.pow(
       1 - Math.abs(angle_d / Math.PI),
-      this.config.stick_factor,
+      stick_factor,
     );
     this._target_lrot += angle_d * dist_angle_factor * rot_speed;
 
