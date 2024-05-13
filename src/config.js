@@ -88,11 +88,11 @@ class CameraConfig {
     /**
      * x distance to target
      */
-    this.distance = 7;
+    this.distance = 10;
     /**
      * z height
      */
-    this.height = 1;
+    this.height = 5;
     /**
      * how fast camera follows target
      */
