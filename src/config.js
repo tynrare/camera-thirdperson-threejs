@@ -74,7 +74,7 @@ class PawnConfig {
      *
      * @type {number}
      */
-    this.steer_threshold = 0.1;
+    this.steer_threshold = 0;
   }
 }
 
