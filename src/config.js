@@ -1,14 +1,51 @@
 /** @namespace Config */
 
 /**
+ * app config 
+ *
+ * @memberof Config
+ */
+class AppConfig {
+  static _instance;
+
+  constructor() {
+		this.input_movement_threshold = 0.4;
+  }
+
+  /**
+   * @returns {AppConfig} .
+   */
+  static get instance() {
+    if (!AppConfig._instance) {
+      AppConfig._instance = new AppConfig();
+    }
+
+    return AppConfig._instance;
+  }
+}
+
+/**
  * render config for {@link Render.Render}
  *
  * @memberof Config
  */
 class RenderConfig {
+  static _instance;
+
   constructor() {
     /** @type {number} */
     this.camera_fov = 75;
+  }
+
+  /**
+   * @returns {RenderConfig} .
+   */
+  static get instance() {
+    if (!RenderConfig._instance) {
+      RenderConfig._instance = new RenderConfig();
+    }
+
+    return RenderConfig._instance;
   }
 }
 
@@ -96,4 +133,4 @@ class CameraConfig {
   }
 }
 
-export { RenderConfig, PawnConfig, CameraConfig };
+export { AppConfig, RenderConfig, PawnConfig, CameraConfig };

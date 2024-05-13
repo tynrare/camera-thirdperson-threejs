@@ -2,6 +2,7 @@
 
 import App from "./app.js";
 import GUI from "lil-gui";
+import { AppConfig } from "./config.js";
 
 /**
  * draw control panel
@@ -13,8 +14,12 @@ function run_toolbox(app) {
   const gui = new GUI();
   gui.close();
   gui.domElement.style.top = "15px";
+  const app_conf = AppConfig.instance;
   const camera_conf = app.playspace.camera_controller.config;
   const pawn_conf = app.playspace.pawn_controller.config;
+
+  const fapp = gui.addFolder("app");
+  fapp.add(app_conf, "input_movement_threshold", 0, 1);
 
   const fcamera = gui.addFolder("camera");
   fcamera.add(camera_conf, "distance", 1e-4, 100);
