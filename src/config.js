@@ -67,7 +67,7 @@ class PawnConfig {
     /**
      * @type {number}
      */
-    this.movement_speed = 1;
+    this.movement_speed = 1.2;
     /**
      * decreases X movement factor
      * depending on Y
