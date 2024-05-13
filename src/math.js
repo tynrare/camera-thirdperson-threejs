@@ -12,3 +12,7 @@ export function angle_sub(angle1, angle2) {
 export function clamp(min, max, v) {
     return Math.min(max, Math.max(v, min))
 }
+
+export function lerp(a, b, t) {
+	return a + t * (b - a);
+}

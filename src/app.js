@@ -4,6 +4,7 @@ import Render from "./render.js";
 import logger from "./logger.js";
 import { InputAction } from "./inputs.js";
 import Playspace from "./playspace.js";
+import { lerp } from "./math.js";
 
 /**
  * Core class
@@ -20,6 +21,12 @@ class App {
     this.render = null;
     /** @type {Playspace} */
     this.playspace = null;
+    /** 
+		 * in threejs dt has to be lerped for proper smooth movemets
+		 *
+		 * @type {number} 
+		 */
+		this.ldt = 0;
   }
 
   init() {
@@ -54,9 +61,10 @@ class App {
 
     const now = performance.now();
     const dt = now - this.timestamp;
+		this.ldt = lerp(this.ldt, dt, 1e-2);
     this.timestamp = now;
 
-    this.step(dt);
+    this.step(this.ldt);
 
     requestAnimationFrame(this.loop.bind(this));
   }
